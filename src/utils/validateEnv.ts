@@ -4,5 +4,6 @@ export const ValidateEnv = () => {
   cleanEnv(process.env, {
     NODE_ENV: str(),
     PORT: port(),
+    HCAPTCHA_SECRET: str(),
   });
 };

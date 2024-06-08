@@ -1,0 +1,87 @@
+[
+    {
+        "_id": 1,
+        "publisherName": "IPM",
+        "publisherLogo": "ipm"
+    },
+    {
+        "_id": 2,
+        "publisherName": "Hikari Light Novel (Thái Hà Books)",
+        "publisherLogo": "hikari"
+    },
+    {
+        "_id": 3,
+        "publisherName": "Sakura Light Novel (Quảng Văn)",
+        "publisherLogo": "sakuraln"
+    },
+    {
+        "_id": 4,
+        "publisherName": "Amak",
+        "publisherLogo": "amak"
+    },
+    {
+        "_id": 5,
+        "publisherName": "Sky Light Novel",
+        "publisherLogo": "sky"
+    },
+    {
+        "_id": 6,
+        "publisherName": "Tsuki Light Novel",
+        "publisherLogo": "tsuki"
+    },
+    {
+        "_id": 7,
+        "publisherName": "Nhã Nam",
+        "publisherLogo": "nhanam"
+    },
+    {
+        "_id": 8,
+        "publisherName": "Owlbooks",
+        "publisherLogo": "owlbooks"
+    },
+    {
+        "_id": 9,
+        "publisherName": "Wingsbooks (Kim Đồng)",
+        "publisherLogo": "wingsbooks"
+    },
+    {
+        "_id": 10,
+        "publisherName": "NXB Trẻ",
+        "publisherLogo": "tre"
+    },
+    {
+        "_id": 11,
+        "publisherName": "TA Books",
+        "publisherLogo": "tabooks"
+    },
+    {
+        "_id": 12,
+        "publisherName": "Ai Novel",
+        "publisherLogo": "ainovel"
+    },
+    {
+        "_id": 13,
+        "publisherName": "Uranix",
+        "publisherLogo": "uranix"
+    },
+    {
+        "_id": 14,
+        "publisherName": "Shine Novel",
+        "publisherLogo": "shine"
+    },
+    {
+        "_id": 15,
+        "publisherName": "Usagi Light Novel",
+        "publisherLogo": "usagi"
+    },
+    {
+        "_id": 16,
+        "publisherName": "Ichi Light Novel",
+        "publisherLogo": "ichi"
+    },
+    {
+        "_id": 17,
+        "publisherName": "Orion Books",
+        "publisherLogo": "orion"
+    }
+]
