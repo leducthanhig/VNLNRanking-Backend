@@ -3,7 +3,7 @@ import { NODE_ENV, DB_HOST, DB_PORT, DB_DATABASE } from '@config';
 
 export const dbConnection = async () => {
   const dbConfing = {
-    url: `mongodb://${DB_HOST}:${DB_PORT}/${DB_DATABASE}`,
+    url: `mongodb://${DB_HOST}:${DB_PORT}`,
     options: {
       useNewUrlParser: true,
       useUnifiedTopology: true
@@ -14,5 +14,5 @@ export const dbConnection = async () => {
     set('debug', true);
   }
 
-  await connect(dbConfing.url);
+  await connect(dbConfing.url, { dbName: DB_DATABASE });
 };
