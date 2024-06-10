@@ -14,6 +14,17 @@ export class VoteController {
             next(error);
         }
     }
+
+    public getVoteLeaderboard = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const data = await VoteModel.getLeaderboard()
+
+            return res.status(200).json({ message: 'findAll', data });
+        } catch (error) {
+            next(error);
+        }
+    }
+
     public postVote = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const body: CreateVoteDto = req.body

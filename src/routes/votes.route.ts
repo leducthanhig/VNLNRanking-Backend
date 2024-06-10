@@ -15,6 +15,7 @@ export class VoteRoute implements Routes {
 
     private initializeRoutes() {
         this.router.get(`${this.path}/all`, this.vote.getVotes);
+        this.router.get(`${this.path}/leaderboard`, this.vote.getVoteLeaderboard);
         this.router.post(`${this.path}`, ValidationMiddleware(CreateVoteDto), this.vote.postVote);
     }
 }

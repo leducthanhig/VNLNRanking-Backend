@@ -1,4 +1,4 @@
-import { prop, getModelForClass } from '@typegoose/typegoose';
+import { prop, getModelForClass, ReturnModelType } from '@typegoose/typegoose';
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import mongoose from 'mongoose';
 
@@ -31,6 +31,104 @@ class Vote extends TimeStamps {
 
     @prop({ required: true })
     public feedback!: Feedback
+
+    public static async getLeaderboard(this: ReturnModelType<typeof Vote>) {
+        const favoriteRanobes = await this.aggregate([
+            {
+                '$unwind': {
+                    'path': '$favoriteRanobe'
+                }
+            }, {
+                '$group': {
+                    '_id': '$favoriteRanobe',
+                    'count': {
+                        '$sum': 1
+                    }
+                }
+            }, {
+                '$lookup': {
+                    'from': 'ranobes',
+                    'localField': '_id',
+                    'foreignField': '_id',
+                    'as': 'ranobe'
+                }
+            }, {
+                '$sort': {
+                    'count': -1
+                }
+            }, {
+                '$addFields': {
+                    'ranobe': {
+                        '$first': '$ranobe'
+                    }
+                }
+            }
+        ])
+        const favoriteIllustrators = await this.aggregate([
+            {
+                '$unwind': {
+                    'path': '$favoriteIllustrator'
+                }
+            }, {
+                '$group': {
+                    '_id': '$favoriteIllustrator',
+                    'count': {
+                        '$sum': 1
+                    }
+                }
+            }, {
+                '$lookup': {
+                    'from': 'illustrators',
+                    'localField': '_id',
+                    'foreignField': '_id',
+                    'as': 'illustrator'
+                }
+            }, {
+                '$sort': {
+                    'count': -1
+                }
+            }, {
+                '$addFields': {
+                    'illustrator': {
+                        '$first': '$illustrator'
+                    }
+                }
+            }
+        ])
+        const favoritePublishers = await this.aggregate([
+            {
+                '$unwind': {
+                    'path': '$favoritePublisher'
+                }
+            }, {
+                '$group': {
+                    '_id': '$favoritePublisher',
+                    'count': {
+                        '$sum': 1
+                    }
+                }
+            }, {
+                '$lookup': {
+                    'from': 'publishers',
+                    'localField': '_id',
+                    'foreignField': '_id',
+                    'as': 'publisher'
+                }
+            }, {
+                '$sort': {
+                    'count': -1
+                }
+            }, {
+                '$addFields': {
+                    'publisher': {
+                        '$first': '$publisher'
+                    }
+                }
+            }
+        ])
+
+        return { favoriteRanobes, favoriteIllustrators, favoritePublishers }
+    }
 }
 
 const VoteModel = getModelForClass(Vote);
