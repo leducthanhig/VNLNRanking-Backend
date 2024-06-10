@@ -19,8 +19,23 @@ export class VoteController {
         try {
             const data = await VoteModel.getLeaderboard()
 
-            return res.status(200).json({ message: 'findAll', data });
+            return res.status(200).json({ message: 'ok', data });
         } catch (error) {
+            next(error);
+        }
+    }
+
+    public getVoteFeedbacks = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const { limit = 10, page = 1 } = req.query
+            const data = {
+                results: await VoteModel.find({}, {}, { limit: Number(limit), skip: (Number(page) - 1) * Number(limit) }),
+                limit,
+                page,
+            }
+            return res.status(200).json({ message: 'ok', data });
+        } catch (error) {
+            console.error(error)
             next(error);
         }
     }
