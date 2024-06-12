@@ -50,6 +50,10 @@ export class VoteController {
                 return res.status(403).json({ message: 'invalidCaptcha' })
             }
 
+            if (!!(await VoteModel.findOne({ ip: req.ip }))) {
+                return res.status(429).json({ message: 'rateLimit' })
+            }
+
             await VoteModel.create({
                 ip: req.ip,
                 favoriteRanobe: body.favoriteRanobe,
