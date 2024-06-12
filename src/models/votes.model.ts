@@ -126,8 +126,9 @@ class Vote extends TimeStamps {
                 }
             }
         ])
+        const count = await this.countDocuments({})
 
-        return { favoriteRanobes, favoriteIllustrators, favoritePublishers }
+        return { favoriteRanobes, favoriteIllustrators, favoritePublishers, count }
     }
 }
 
