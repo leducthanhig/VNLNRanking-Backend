@@ -20,6 +20,9 @@ class Vote extends TimeStamps {
     @prop({ required: true })
     public ip!: string
 
+    @prop()
+    public ua?: string
+
     @prop({ type: Number, required: true, default: [] })
     public favoriteRanobe!: mongoose.Types.Array<number>;
 

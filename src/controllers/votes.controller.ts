@@ -43,7 +43,6 @@ export class VoteController {
     public postVote = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const body: CreateVoteDto = req.body
-
             const hcaptchaResult = await verify(HCAPTCHA_SECRET, body.token);
 
             if (!hcaptchaResult.success) {
@@ -54,8 +53,11 @@ export class VoteController {
                 return res.status(429).json({ message: 'rateLimit' })
             }
 
+            const userAgent = req.get('User-Agent');
+
             await VoteModel.create({
                 ip: req.ip,
+                ua: userAgent,
                 favoriteRanobe: body.favoriteRanobe,
                 favoriteIllustrator: body.favoriteIllustrator,
                 favoritePublisher: body.favoritePublisher,
