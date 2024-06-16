@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { CreateVoteDto } from '../dtos/votes.dto';
 import { verify } from 'hcaptcha';
-import { HCAPTCHA_SECRET } from '../config';
+import { HCAPTCHA_SECRET, SECRET_KEY } from '../config';
 import VoteModel from '../models/votes.model';
 
 export class VoteController {
@@ -17,6 +17,10 @@ export class VoteController {
 
     public getVoteLeaderboard = async (req: Request, res: Response, next: NextFunction) => {
         try {
+            const password = req.query.password
+            if (!password || password.toString() !== SECRET_KEY) {
+                return res.status(403).json({ message: 'incorrectPassword' })
+            }
             const data = await VoteModel.getLeaderboard()
 
             return res.status(200).json({ message: 'ok', data });
@@ -29,9 +33,10 @@ export class VoteController {
         try {
             const { limit = 10, page = 1 } = req.query
             const data = {
-                results: await VoteModel.find({}, {}, { limit: Number(limit), skip: (Number(page) - 1) * Number(limit) }),
+                results: await VoteModel.find({}, 'feedback ip', { limit: Number(limit), skip: (Number(page) - 1) * Number(limit) }),
                 limit,
                 page,
+                total: await VoteModel.countDocuments({})
             }
             return res.status(200).json({ message: 'ok', data });
         } catch (error) {
