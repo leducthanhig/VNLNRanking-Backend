@@ -33,7 +33,7 @@ export class VoteController {
         try {
             const { limit = 10, page = 1 } = req.query
             const data = {
-                results: await VoteModel.find({}, 'feedback ip', { limit: Number(limit), skip: (Number(page) - 1) * Number(limit) }),
+                results: await VoteModel.find({}, 'feedback ip createdAt', { limit: Number(limit), skip: (Number(page) - 1) * Number(limit) }),
                 limit,
                 page,
                 total: await VoteModel.countDocuments({})
