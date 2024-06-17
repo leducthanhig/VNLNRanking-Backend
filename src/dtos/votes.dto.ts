@@ -25,7 +25,7 @@ class Feedback {
 export class CreateVoteDto {
     @IsInt({ each: true })
     @Min(1, { each: true })
-    @Max(215, { each: true })
+    @Max(216, { each: true })
     @ArrayUnique()
     @ArrayMaxSize(10)
     favoriteRanobe: number[];
