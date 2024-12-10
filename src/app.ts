@@ -58,7 +58,7 @@ class App {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
-    this.app.set('trust proxy', true)
+    this.app.set('trust proxy', true);
   }
 
   private initializeRoutes(routes: Routes[]) {

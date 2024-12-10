@@ -5,7 +5,7 @@ import { HttpException } from '@/exceptions/HttpException';
 import { DataStoredInToken, RequestWithUser } from '@interfaces/auth.interface';
 import { UserModel } from '@models/users.model';
 
-const getAuthorization = (req) => {
+const getAuthorization = req => {
   const coockie = req.cookies['Authorization'];
   if (coockie) return coockie;
 
@@ -13,7 +13,7 @@ const getAuthorization = (req) => {
   if (header) return header.split('Bearer ')[1];
 
   return null;
-}
+};
 
 export const AuthMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {

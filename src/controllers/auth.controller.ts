@@ -5,7 +5,7 @@ import { User } from '@interfaces/users.interface';
 import { AuthService } from '@services/auth.service';
 
 export class AuthController {
-  public auth =  Container.get(AuthService);
+  public auth = Container.get(AuthService);
 
   public signUp = async (req: Request, res: Response, next: NextFunction) => {
     try {
