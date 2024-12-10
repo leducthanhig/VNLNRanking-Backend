@@ -1,6 +1,6 @@
 import { prop, getModelForClass, ReturnModelType } from '@typegoose/typegoose';
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
-import mongoose from 'mongoose';
+import mongoose, { PipelineStage } from 'mongoose';
 
 class Feedback {
   @prop()
@@ -50,76 +50,10 @@ class Vote extends TimeStamps {
   public userInfo!: UserInfo;
 
   public static async getLeaderboard(this: ReturnModelType<typeof Vote>) {
-    const favoriteRanobes = await this.aggregate([
-      {
-        $unwind: {
-          path: '$favoriteRanobe',
-        },
-      },
-      {
-        $group: {
-          _id: '$favoriteRanobe',
-          count: {
-            $sum: 1,
-          },
-        },
-      },
-      {
-        $lookup: {
-          from: 'ranobes',
-          localField: '_id',
-          foreignField: '_id',
-          as: 'ranobe',
-        },
-      },
-      {
-        $sort: {
-          count: -1,
-        },
-      },
-      {
-        $addFields: {
-          ranobe: {
-            $first: '$ranobe',
-          },
-        },
-      },
-    ]);
-    const favoriteIllustrators = await this.aggregate([
-      {
-        $unwind: {
-          path: '$favoriteIllustrator',
-        },
-      },
-      {
-        $group: {
-          _id: '$favoriteIllustrator',
-          count: {
-            $sum: 1,
-          },
-        },
-      },
-      {
-        $lookup: {
-          from: 'illustrators',
-          localField: '_id',
-          foreignField: '_id',
-          as: 'illustrator',
-        },
-      },
-      {
-        $sort: {
-          count: -1,
-        },
-      },
-      {
-        $addFields: {
-          illustrator: {
-            $first: '$illustrator',
-          },
-        },
-      },
-    ]);
+    const favoriteRanobes = await this.aggregate(getRanobeAggregate('favoriteRanobe'));
+    const favoriteOneshots = await this.aggregate(getRanobeAggregate('favoriteOneshot'));
+    const favoriteRookies = await this.aggregate(getRanobeAggregate('favoriteRookie'));
+
     const favoritePublishers = await this.aggregate([
       {
         $unwind: {
@@ -157,13 +91,49 @@ class Vote extends TimeStamps {
     ]);
     const count = await this.countDocuments({});
 
-    return { favoriteRanobes, favoriteIllustrators, favoritePublishers, count };
+    return { favoriteRanobes, favoritePublishers, favoriteOneshots, favoriteRookies, count };
   }
 }
 
 const VoteModel = getModelForClass(Vote);
 
 export default VoteModel;
+
+const getRanobeAggregate = (field: string): PipelineStage[] => [
+  {
+    $unwind: {
+      path: `$${field}`,
+    },
+  },
+  {
+    $group: {
+      _id: `$${field}`,
+      count: {
+        $sum: 1,
+      },
+    },
+  },
+  {
+    $lookup: {
+      from: 'ranobes',
+      localField: '_id',
+      foreignField: '_id',
+      as: 'ranobe',
+    },
+  },
+  {
+    $sort: {
+      count: -1,
+    },
+  },
+  {
+    $addFields: {
+      ranobe: {
+        $first: '$ranobe',
+      },
+    },
+  },
+];
 
 const body = {
   favoriteRanobe: [1, 2, 3],
