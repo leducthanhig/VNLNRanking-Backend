@@ -16,6 +16,14 @@ class Feedback {
   public publisher?: string;
 }
 
+class UserInfo {
+  @prop({ required: true })
+  public gender!: string;
+
+  @prop({ required: true })
+  public age!: number;
+}
+
 class Vote extends TimeStamps {
   @prop({ required: true })
   public ip!: string;
@@ -27,13 +35,19 @@ class Vote extends TimeStamps {
   public favoriteRanobe!: mongoose.Types.Array<number>;
 
   @prop({ type: Number, required: true, default: [] })
-  public favoriteIllustrator!: mongoose.Types.Array<number>;
+  public favoriteOneshot!: mongoose.Types.Array<number>;
+
+  @prop({ type: Number, required: true, default: [] })
+  public favoriteRookie!: mongoose.Types.Array<number>;
 
   @prop({ type: Number, required: true, default: [] })
   public favoritePublisher!: mongoose.Types.Array<number>;
 
   @prop({ required: true })
   public feedback!: Feedback;
+
+  @prop({ required: true })
+  public userInfo!: UserInfo;
 
   public static async getLeaderboard(this: ReturnModelType<typeof Vote>) {
     const favoriteRanobes = await this.aggregate([
@@ -153,13 +167,18 @@ export default VoteModel;
 
 const body = {
   favoriteRanobe: [1, 2, 3],
-  favoriteIllustrator: [1, 2, 3],
+  favoriteOneshot: [17, 22, 38, 39],
+  favoriteRookie: [2, 6, 13],
   favoritePublisher: [1, 2, 3],
   feedback: {
     topic: '',
-    content: '',
-    title: '',
-    publisher: '',
+    content: "''",
+    title: "''",
+    publisher: "''",
   },
-  token: 'eJy...',
+  userInfo: {
+    gender: 'famale',
+    age: 22,
+  },
+  token: '10000000-aaaa-bbbb-cccc-000000000001',
 };

@@ -64,9 +64,11 @@ export class VoteController {
         ip: req.ip,
         ua: userAgent,
         favoriteRanobe: body.favoriteRanobe,
-        favoriteIllustrator: body.favoriteIllustrator,
+        favoriteRookie: body.favoriteRookie,
+        favoriteOneshot: body.favoriteOneshot,
         favoritePublisher: body.favoritePublisher,
         feedback: body.feedback,
+        userInfo: body.userInfo,
       });
 
       return res.status(200).json({ message: 'created' });
