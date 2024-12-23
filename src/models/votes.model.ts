@@ -53,6 +53,47 @@ class Vote extends TimeStamps {
     const favoriteRanobes = await this.aggregate(getRanobeAggregate('favoriteRanobe'));
     const favoriteOneshots = await this.aggregate(getRanobeAggregate('favoriteOneshot'));
     const favoriteRookies = await this.aggregate(getRanobeAggregate('favoriteRookie'));
+    const gender = await this.aggregate([
+      {
+        $unwind: {
+          path: `$userInfo.gender`,
+        },
+      },
+      {
+        $group: {
+          _id: `$userInfo.gender`,
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+        },
+      },
+    ]);
+
+    const age = await this.aggregate([
+      {
+        $unwind: {
+          path: `$userInfo.age`,
+        },
+      },
+      {
+        $group: {
+          _id: `$userInfo.age`,
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+        },
+      },
+    ]);
 
     const favoritePublishers = await this.aggregate([
       {
@@ -91,7 +132,7 @@ class Vote extends TimeStamps {
     ]);
     const count = await this.countDocuments({});
 
-    return { favoriteRanobes, favoritePublishers, favoriteOneshots, favoriteRookies, count };
+    return { count, gender, age, favoriteRanobes, favoritePublishers, favoriteOneshots, favoriteRookies };
   }
 }
 
