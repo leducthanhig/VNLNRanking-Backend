@@ -3,7 +3,7 @@ config({ path: `.env.${process.env.NODE_ENV || 'development'}.local` });
 
 export const CREDENTIALS = process.env.CREDENTIALS === 'true';
 export const { NODE_ENV, PORT, SECRET_KEY, LOG_FORMAT, LOG_DIR, ORIGIN, HCAPTCHA_SECRET } = process.env;
-export const { DB_HOST, DB_PORT, DB_DATABASE } = process.env;
+export const { DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD } = process.env;
 
 export const ROOKIE_RANOBE_IDS = [2, 6, 13, 17, 19, 22, 24, 38, 39, 40, 41, 43, 47];
 

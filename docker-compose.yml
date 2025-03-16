@@ -20,9 +20,15 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DB_HOST: localhost
+      DB_HOST: mongo
       DB_PORT: 27017
       DB_DATABASE: dev
+      DB_USERNAME: admin
+      DB_PASSWORD: password
+      SECRET_KEY: VNLNRanking-Backend-Testing
+      LOG_DIR: ./logs
+      PORT: 3000
+      HCAPTCHA_SECRET: '0x0000000000000000000000000000000000000000'  # Test secret for development
     volumes:
       - ./:/app
       - /app/node_modules
@@ -43,6 +49,9 @@ services:
       DB_HOST: localhost
       DB_PORT: 27017
       DB_DATABASE: dev
+      MONGO_INITDB_DATABASE: dev
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
     networks:
       - backend
 

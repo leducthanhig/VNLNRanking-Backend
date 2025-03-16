@@ -25,6 +25,9 @@ class UserInfo {
 }
 
 class Vote extends TimeStamps {
+  @prop({ type: Number, required: true })
+  public votingPeriodId!: number;
+
   @prop({ required: true })
   public ip!: string;
 
@@ -131,6 +134,97 @@ class Vote extends TimeStamps {
       },
     ]);
     const count = await this.countDocuments({});
+
+    return { count, gender, age, favoriteRanobes, favoritePublishers, favoriteOneshots, favoriteRookies };
+  }
+
+  public static async getLeaderboardByPeriod(this: ReturnModelType<typeof Vote>, periodId: number) {
+    const matchStage = { votingPeriodId: periodId };
+    const favoriteRanobes = await this.aggregate([{ $match: matchStage }, ...getRanobeAggregate('favoriteRanobe')]);
+    const favoriteOneshots = await this.aggregate([{ $match: matchStage }, ...getRanobeAggregate('favoriteOneshot')]);
+    const favoriteRookies = await this.aggregate([{ $match: matchStage }, ...getRanobeAggregate('favoriteRookie')]);
+    const gender = await this.aggregate([
+      { $match: matchStage },
+      {
+        $unwind: {
+          path: `$userInfo.gender`,
+        },
+      },
+      {
+        $group: {
+          _id: `$userInfo.gender`,
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+        },
+      },
+    ]);
+
+    const age = await this.aggregate([
+      { $match: matchStage },
+      {
+        $unwind: {
+          path: `$userInfo.age`,
+        },
+      },
+      {
+        $group: {
+          _id: `$userInfo.age`,
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+        },
+      },
+    ]);
+
+    const favoritePublishers = await this.aggregate([
+      { $match: matchStage },
+      {
+        $unwind: {
+          path: '$favoritePublisher',
+        },
+      },
+      {
+        $group: {
+          _id: '$favoritePublisher',
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: 'publishers',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'publisher',
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+        },
+      },
+      {
+        $addFields: {
+          publisher: {
+            $first: '$publisher',
+          },
+        },
+      },
+    ]);
+
+    const count = await this.countDocuments(matchStage);
 
     return { count, gender, age, favoriteRanobes, favoritePublishers, favoriteOneshots, favoriteRookies };
   }

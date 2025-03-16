@@ -1,0 +1,67 @@
+@baseUrl = http://localhost:3000
+@secret = VNLNRanking-Backend-Testing
+
+### Get all voting periods
+GET {{baseUrl}}/periods
+
+### Get current active period
+GET {{baseUrl}}/periods/current
+
+### Create a new voting period (admin)
+POST {{baseUrl}}/periods?password={{secret}}
+Content-Type: application/json
+
+{
+  "_id": 1,
+  "name": "March 2025",
+  "startDate": "2025-03-01T00:00:00.000Z",
+  "endDate": "2025-03-31T23:59:59.999Z",
+  "isActive": true
+}
+
+### Submit a vote (requires active period)
+POST {{baseUrl}}/votes
+Content-Type: application/json
+
+{
+  "token": "10000000-aaaa-bbbb-cccc-000000000001",
+  "favoriteRanobe": [4, 5],
+  "favoriteOneshot": [17, 22],
+  "favoriteRookie": [43, 47],
+  "favoritePublisher": [1, 2],
+  "feedback": {
+    "content": "This is great!",
+    "title": "Feedback title",
+    "publisher": "Publisher feedback"
+  },
+  "userInfo": {
+    "gender": "male",
+    "age": 25
+  }
+}
+
+### Toggle period active status (admin)
+PATCH {{baseUrl}}/periods/1/active?password={{secret}}
+Content-Type: application/json
+
+{
+  "isActive": false
+}
+
+### Create another voting period - for testing monthly voting
+POST {{baseUrl}}/periods?password={{secret}}
+Content-Type: application/json
+
+{
+  "_id": 2,
+  "name": "April 2025",
+  "startDate": "2025-03-01T00:00:00.000Z",
+  "endDate": "2025-04-30T23:59:59.999Z",
+  "isActive": true
+}
+
+### Get global leaderboard (admin)
+GET {{baseUrl}}/votes/leaderboard?password={{secret}}
+
+### Get period-specific leaderboard (admin)
+GET {{baseUrl}}/votes/leaderboard/period/1?password={{secret}}
